@@ -11,3 +11,5 @@ Launch this in your browser:
 > This also means that the code isn't the most elegant because every notebook needs to have all of the same utility functions. If you can think of a better way to manage this, please let me know!
 
 > — Jordan
+
+Comments very welcome via [GitHub issues](https://github.com/j6k4m8/covid19-notebooks/issues) or [other ways](https://twitter.com/j6m8) of [contacting me](https://jordan.matelsky.com).
