@@ -12,4 +12,7 @@ Launch this in your browser:
 >
 > — Jordan
 
+
+> Note (Oct 2021): I've removed several notebooks (placed in "Archive/") because the data-source has grown stale. The new notebooks pull live data from the CDC, and are therefore more reliable for recent information.
+
 Comments very welcome via [GitHub issues](https://github.com/j6k4m8/covid19-notebooks/issues) or [other ways](https://twitter.com/j6m8) of [contacting me](https://jordan.matelsky.com).
