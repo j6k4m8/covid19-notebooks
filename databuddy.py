@@ -1,22 +1,42 @@
 from typing import List, Union
 import pandas as pd
 from functools import cache
+from joblib import Parallel, delayed
 
 
 @cache
-def get_data():
+def get_data(N: int = 4):
     dfs = []
-    page = 0
+    # page = 0
+    # while True:
+    #     new_data = pd.read_json(
+    #         f"https://data.cdc.gov/resource/9mfq-cb36.json?$limit=10000&$offset={10000*page}&$order=created_at"
+    #     )
+    #     if len(new_data):
+    #         dfs.append(new_data)
+    #         page += 1
+    #     else:
+    #         break
+
+    # We can download pages in parallel using joblib. The catch is that we
+    # need to check after every N jobs t see if we have any new data.
+    page_start = 0
     while True:
-        new_data = pd.read_json(
-            f"https://data.cdc.gov/resource/9mfq-cb36.json?$limit=10000&$offset={10000*page}&$order=created_at"
+        four_new_pages = Parallel(n_jobs=4)(
+            delayed(pd.read_json)(
+                f"https://data.cdc.gov/resource/9mfq-cb36.json?$limit=10000&$offset={10000*page}&$order=created_at"
+            )
+            for page in range(page_start, page_start + N)
         )
-        if len(new_data):
-            dfs.append(new_data)
-            page += 1
-        else:
+        dfs.extend(four_new_pages)
+        # If each page is 10,000 elements long, we need to continue looping.
+        # If ANY of the pages are shorter than 10,000, we can stop.
+        if any(len(df) < 10000 for df in four_new_pages):
             break
-    return pd.concat(dfs)
+        else:
+            page_start += N
+    # sort by date
+    return pd.concat(dfs).sort_values("created_at")
 
 
 @cache
